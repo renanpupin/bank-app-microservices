@@ -8,19 +8,7 @@ const io = require('socket.io')(server);
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 let ioRedis = require('socket.io-redis');
-// const cote = require('cote')({redis: {
-//     host: "localhost",
-//     port: '6379'
-// }});
 const cote = require('cote');
-// const cote = require('cote')({ redis: {
-//     host: 'ec2-3-229-68-32.compute-1.amazonaws.com',
-//     port: '13069',
-//     user: 'h',
-//     password: 'p4fe85c6325067e9a36e9a1eb0fcbe9cdb8fa504bae056fe893b85dc2b6c4312e'
-// } });
-//
-// io.adapter(ioRedis("redis://h:p4fe85c6325067e9a36e9a1eb0fcbe9cdb8fa504bae056fe893b85dc2b6c4312e@ec2-3-229-68-32.compute-1.amazonaws.com:13069"));
 
 io.on('connection', (socket) => {
     console.log('a user connected');
