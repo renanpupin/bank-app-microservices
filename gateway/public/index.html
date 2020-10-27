@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<body>
+
+<div id="mydiv"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script type="text/babel">
+    class Hello extends React.Component {
+
+        constructor(props) {
+            super(props);
+
+            this.state = {
+                list: []
+            }
+        }
+
+        createAccount = async (id) => {
+            console.log("createAccount", id);
+            try{
+                let response = await axios({
+                    method: 'POST',
+                    url: 'http://localhost:3000/api/accounts',
+                    data: {
+                        user: id,
+                    }
+                });
+
+                console.log(response.data);
+
+                return response.data.account;
+            }catch (err){
+                console.log(err);
+            }
+        }
+
+        getAccount = async (id) => {
+            console.log("getAccount", id);
+            try{
+                let response = await axios({
+                    method: 'GET',
+                    url: 'http://localhost:3000/api/accounts/'+id,
+                    // data: {
+                    //     user: id,
+                    // }
+                });
+
+                console.log(response.data);
+
+                return response.data.account;
+            }catch (err){
+                console.log(err);
+            }
+        }
+
+        start = async () => {
+            let account1 = await this.createAccount(new Date().getTime()+"1");
+            console.log("account1 =", account1);
+            // let getAccount1 = await this.getAccount(account1._id);
+            // console.log("get account =", getAccount1);
+            setTimeout(async ()=> {
+                let account2 = await this.createAccount(new Date().getTime() + "2");
+                console.log("account2 =", account2);
+            }, 500)
+        }
+
+        async componentDidMount(){
+            let socket = io.connect();
+
+            this.start();
+
+            socket.on('deposit-ok', (data) => {
+                console.log('deposit-ok!', data);
+
+                // this.setState({
+                //     list: [
+                //         ...this.state.list,
+                //         {
+                //             id: data.id,
+                //             status: "OK"
+                //         }
+                //     ]
+                // });
+            });
+
+            socket.on('deposit-err', (data) => {
+                console.log('deposit-err!', data);
+
+                // this.setState({
+                //     list: [
+                //         ...this.state.list,
+                //         {
+                //             id: data.id,
+                //             status: "ERR"
+                //         }
+                //     ]
+                // });
+            });
+        }
+
+        render() {
+            return(
+                <div>
+                    <h1>Hello World!</h1>
+                    <br/>
+                    {this.state.list.map((item, index) => <p key={index}>{item.operation}</p>)}
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(<Hello />, document.getElementById('mydiv'))
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+    "apps": [
+        {
+            "name"      : "accountService",
+            "script"    : "services/transaction/service.js",
+            "watch"     : "services/account"
+        },
+        {
+            "name"      : "transactionService",
+            "script"    : "services/transaction/service.js",
+            "watch"     : "services/account"
+        },
+        {
+            "name"      : "gateway",
+            "script"    : "gateway/server.js",
+            "watch"     : "gateway"
+        }
+    ]
+}
